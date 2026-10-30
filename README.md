@@ -21,7 +21,7 @@ Only `status: published` routes appear in the built sites. Introduction-only sta
 
 ## Publication
 
-Publication is intentionally deferred. No GitHub remote, Pages setting or DNS record is configured by the local scaffold. Owner-specific workflow variables are configured at upload time; see the `journeys` deployment guide.
+GitHub repository: https://github.com/datubu/human-journeys . Website builds read this repository under the same GitHub owner. See the journeys deployment guide for Pages and domain setup.
 
 ## Contributions and rights
 
