@@ -1,0 +1,34 @@
+name: Check bilingual content
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          path: content
+      - uses: actions/checkout@v6
+        with:
+          repository: ${{ github.repository_owner }}/journeys
+          path: engine
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+      - working-directory: engine
+        run: npm ci --no-audit --no-fund
+      - working-directory: engine
+        run: node scripts/check-content.mjs ../content
+      - name: Notify site builds after a valid main-branch update
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        working-directory: engine
+        run: node scripts/dispatch-sites.mjs
+        env:
+          PAGES_DISPATCH_TOKEN: ${{ secrets.PAGES_DISPATCH_TOKEN }}
+          GITHUB_OWNER: ${{ github.repository_owner }}
+          CONTENT_REF: ${{ github.sha }}
